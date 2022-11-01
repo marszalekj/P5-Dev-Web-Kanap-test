@@ -12,10 +12,6 @@ function displayCart() {
       " est vide";
   } else {
     for (let product in cartLocalStorage) {
-      let productMatch = product.find(
-        (product) => product._id === cartLocalStorage._id
-      );
-      console.log(productMatch);
       // Insertion de "article"
       let articleProduct = document.createElement("article");
       document.getElementById("cart__items").appendChild(articleProduct);
@@ -61,6 +57,43 @@ function displayCart() {
       let priceProduct = document.createElement("p");
       itemContentDescriptionProduct.appendChild(priceProduct);
       priceProduct.innerText = cartLocalStorage[product].price + " €";
+
+      // Insertion de "div item content settings"
+      let itemContentSettingsProduct = document.createElement("div");
+      itemContentProduct.appendChild(itemContentSettingsProduct);
+      itemContentSettingsProduct.className = "cart__item__content__settings";
+
+      // Insertion de "div item content settings quantity"
+      let itemContentSettingsQuantityProduct = document.createElement("div");
+      itemContentSettingsProduct.appendChild(
+        itemContentSettingsQuantityProduct
+      );
+      itemContentSettingsQuantityProduct.className =
+        "cart__item__content__settings_quantity";
+
+      // Insertion quantite
+      let quantityProduct = document.createElement("p");
+      itemContentSettingsQuantityProduct.appendChild(quantityProduct);
+      quantityProduct.innerText =
+        "Quantité : " + cartLocalStorage[product].quantity;
+      let quantityInputProduct = document.createElement("input");
+      quantityProduct.appendChild(quantityInputProduct);
+      quantityInputProduct.setAttribute("type", "number");
+      quantityInputProduct.className = "itemQuantity";
+      quantityInputProduct.setAttribute("name", "itemQuantity");
+      quantityInputProduct.setAttribute("min", "1");
+      quantityInputProduct.setAttribute("max", "100");
+      quantityInputProduct.value = cartLocalStorage[product].quantity;
+
+      // Insertion de "div item content settings delete"
+      let itemContentSettingsDeleteProduct = document.createElement("div");
+      itemContentSettingsProduct.appendChild(itemContentSettingsDeleteProduct);
+      itemContentSettingsDeleteProduct.className =
+        "cart__item__content__settings_delete";
+      let deleteProduct = document.createElement("p");
+      itemContentSettingsDeleteProduct.appendChild(deleteProduct);
+      deleteProduct.className = "deleteItem";
+      deleteProduct.innerText = "Supprimer";
     }
   }
 }
