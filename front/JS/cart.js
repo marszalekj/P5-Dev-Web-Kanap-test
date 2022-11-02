@@ -98,3 +98,69 @@ function displayCart() {
   }
 }
 displayCart();
+
+function deleteArticle() {
+  let deleteItem = document.querySelectorAll(".deleteItem");
+
+  for (let i = 0; i < deleteItem.length; i++) {
+    deleteItem[i].addEventListener("click", (e) => {
+      let deleteId = cartLocalStorage[i].id;
+      let deleteColor = cartLocalStorage[i].color;
+      e.preventDefault();
+      newCart = cartLocalStorage.filter(
+        (element) => element.id !== deleteId || element.color !== deleteColor
+      );
+      localStorage.setItem("product", JSON.stringify(newCart));
+      location.reload();
+    });
+  }
+}
+deleteArticle();
+
+function changeQuantity() {
+  let changeQnt = document.querySelectorAll(".itemQuantity");
+  for (let i = 0; i < changeQnt.length; i++) {
+    changeQnt[i].addEventListener("change", (e) => {
+      e.preventDefault();
+      let productQnt = cartLocalStorage[i].quantity;
+      let newValue = changeQnt[i].valueAsNumber;
+
+      const result = cartLocalStorage.filter(
+        (element) => element.newValue !== productQnt
+      );
+      cartLocalStorage[i].quantity = newValue;
+
+      localStorage.setItem("product", JSON.stringify(cartLocalStorage));
+
+      location.reload();
+    });
+  }
+}
+changeQuantity();
+
+function total() {
+  // On récupère la quantité totale
+  let quantity = document.getElementsByClassName("itemQuantity");
+  let productLength = quantity.length;
+  totalQuantity = 0;
+  //(expression initiale, condition, incrémentation)
+  for (let i = 0; i < productLength; i++) {
+    totalQuantity += quantity[i].valueAsNumber;
+  }
+
+  let productTotalQuantity = document.getElementById("totalQuantity");
+  productTotalQuantity.textContent = totalQuantity;
+
+  // On récupère le prix total
+
+  totalPrice = 0;
+  for (let i = 0; i < productLength; i++) {
+    let price = cartLocalStorage[i].price;
+    console.log(price);
+    totalPrice += quantity[i].valueAsNumber * price;
+  }
+
+  let productTotalPrice = document.getElementById("totalPrice");
+  productTotalPrice.textContent = totalPrice;
+}
+total();
