@@ -98,7 +98,7 @@ function displayCart() {
   }
 }
 displayCart();
-
+// Suppression article
 function deleteArticle() {
   let deleteItem = document.querySelectorAll(".deleteItem");
 
@@ -116,7 +116,7 @@ function deleteArticle() {
   }
 }
 deleteArticle();
-
+// Modification de la quantite
 function changeQuantity() {
   let changeQnt = document.querySelectorAll(".itemQuantity");
   for (let i = 0; i < changeQnt.length; i++) {
@@ -137,7 +137,7 @@ function changeQuantity() {
   }
 }
 changeQuantity();
-
+// Calcul de la quantite totale et du prix total
 function total() {
   let quantity = document.getElementsByClassName("itemQuantity");
   let productLength = quantity.length;
@@ -172,6 +172,7 @@ const city = document.getElementById("city");
 
 let btnOrder = document.getElementById("order");
 
+// Creation des Regex
 let textRegExp = new RegExp(/^([A-Za-z]{3,20}-{0,1})?([A-Za-z]{3,20})$/);
 let addressRegExp = new RegExp(/^[a-zA-Z0-9.,-_ ]{5,50}[ ]{0,2}$/);
 let emailRegExp = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
@@ -179,11 +180,13 @@ let emailRegExp = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
 function checkInput(input, regex) {
   let testInput = regex.test(input.value);
   let p = input.nextElementSibling;
+  // Si les donnees sont ok
   if (testInput) {
     p.textContent = "Champ valide";
     p.style.color = "#006400";
     p.style.color.remove = "#BDB0C7";
     return true;
+    // Si les donnees ne sont pas ok
   } else {
     p.textContent = "Champ non valide";
     p.style.color = "#BDB0C7";
@@ -235,8 +238,8 @@ btnOrder.addEventListener("click", function (e) {
       city: city.value,
       email: email.value,
     };
+    // Creation de l'array contenant les ID des produits
     const products = [];
-
     for (let i = 0; i < cartLocalStorage.length; i++) {
       products.push(cartLocalStorage[i].productId);
     }
@@ -244,6 +247,7 @@ btnOrder.addEventListener("click", function (e) {
     console.log(products);
     let orderId;
     sendData();
+    // Creation fonction envoyant les donnees au Back
     async function sendData() {
       fetch(`http://localhost:3000/api/products/order`, {
         method: "POST",
@@ -253,7 +257,7 @@ btnOrder.addEventListener("click", function (e) {
           "Content-Type": "application/json",
         },
       })
-        // Récupération et stockage de la réponse de l'API (orderId)
+        // Récupération de la réponse de l'API
         .then((res) => res.json())
         .then((server) => {
           let orderId = server.orderId;
@@ -261,6 +265,7 @@ btnOrder.addEventListener("click", function (e) {
           console.log(orderId);
           // Si l'orderId a bien été récupéré, on redirige l'utilisateur vers la page de Confirmation
           window.location.href = `./confirmation.html?orderid=${orderId}`;
+          localStorage.clear();
         });
     }
   } else if (
