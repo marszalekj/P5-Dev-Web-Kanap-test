@@ -139,19 +139,16 @@ function changeQuantity() {
 changeQuantity();
 
 function total() {
-  // On récupère la quantité totale
   let quantity = document.getElementsByClassName("itemQuantity");
   let productLength = quantity.length;
   totalQuantity = 0;
-  //(expression initiale, condition, incrémentation)
+
   for (let i = 0; i < productLength; i++) {
     totalQuantity += quantity[i].valueAsNumber;
   }
 
   let productTotalQuantity = document.getElementById("totalQuantity");
   productTotalQuantity.textContent = totalQuantity;
-
-  // On récupère le prix total
 
   totalPrice = 0;
   for (let i = 0; i < productLength; i++) {
@@ -164,3 +161,118 @@ function total() {
   productTotalPrice.textContent = totalPrice;
 }
 total();
+
+// Formulaire
+
+const firstName = document.getElementById("firstName");
+const lastName = document.getElementById("lastName");
+const address = document.getElementById("address");
+const email = document.getElementById("email");
+const city = document.getElementById("city");
+
+let btnOrder = document.getElementById("order");
+
+let textRegExp = new RegExp(/^([A-Za-z]{3,20}-{0,1})?([A-Za-z]{3,20})$/);
+let addressRegExp = new RegExp(/^[a-zA-Z0-9.,-_ ]{5,50}[ ]{0,2}$/);
+let emailRegExp = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
+
+function checkInput(input, regex) {
+  let testInput = regex.test(input.value);
+  let p = input.nextElementSibling;
+  if (testInput) {
+    p.textContent = "Champ valide";
+    p.style.color = "#006400";
+    p.style.color.remove = "#BDB0C7";
+    return true;
+  } else {
+    p.textContent = "Champ non valide";
+    p.style.color = "#BDB0C7";
+    p.style.color.remove = "#006400";
+    return false;
+  }
+}
+// validation prenom
+let inputFirstName = firstName.addEventListener("change", function () {
+  checkInput(firstName, textRegExp);
+});
+
+// validation nom
+let inputLastName = lastName.addEventListener("change", function () {
+  checkInput(lastName, textRegExp);
+});
+
+// validation adresse
+let inputAddress = address.addEventListener("change", function () {
+  checkInput(address, addressRegExp);
+});
+// validation ville
+let inputCity = city.addEventListener("change", function () {
+  checkInput(city, textRegExp);
+});
+
+// validation email
+let inputEmail = email.addEventListener("change", function () {
+  checkInput(email, emailRegExp);
+});
+
+// On ecoute le clic sur le bouton commander
+btnOrder.addEventListener("click", function (e) {
+  e.preventDefault();
+  if (
+    checkInput(firstName, textRegExp) &&
+    checkInput(lastName, textRegExp) &&
+    checkInput(address, addressRegExp) &&
+    checkInput(city, textRegExp) &&
+    checkInput(email, emailRegExp) &&
+    cartLocalStorage.length > 0
+  ) {
+    alert("Merci pour votre commande !");
+    // Creation du contact
+    const contact = {
+      firstName: firstName.value,
+      lastName: lastName.value,
+      address: address.value,
+      city: city.value,
+      email: email.value,
+    };
+    const products = [];
+
+    for (let i = 0; i < cartLocalStorage.length; i++) {
+      products.push(cartLocalStorage[i].productId);
+    }
+    console.log(contact);
+    console.log(products);
+    let orderId;
+    sendData();
+    async function sendData() {
+      fetch(`http://localhost:3000/api/products/order`, {
+        method: "POST",
+        body: JSON.stringify({ contact, products }),
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      })
+        // Récupération et stockage de la réponse de l'API (orderId)
+        .then((res) => res.json())
+        .then((server) => {
+          let orderId = server.orderId;
+          console.log(server);
+          console.log(orderId);
+          // Si l'orderId a bien été récupéré, on redirige l'utilisateur vers la page de Confirmation
+          window.location.href = `./confirmation.html?orderid=${orderId}`;
+        });
+    }
+  } else if (
+    checkInput(firstName, textRegExp) ||
+    checkInput(lastName, textRegExp) ||
+    checkInput(address, addressRegExp) ||
+    checkInput(city, textRegExp) ||
+    checkInput(email, emailRegExp) ||
+    cartLocalStorage.length < 1
+  ) {
+    alert(
+      "Veuillez remplir tous les champs ou ajouter un article dans votre panier"
+    );
+  }
+});
