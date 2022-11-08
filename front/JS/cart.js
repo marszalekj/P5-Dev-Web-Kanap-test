@@ -10,6 +10,7 @@ function displayCart() {
   if (cartLocalStorage === null || cartLocalStorage.length == 0) {
     document.querySelector("#cartAndFormContainer > h1").textContent +=
       " est vide";
+    // Si le panier contient des articles
   } else {
     for (let product in cartLocalStorage) {
       // Insertion de "article"
