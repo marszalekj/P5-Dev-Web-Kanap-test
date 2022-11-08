@@ -66,20 +66,22 @@ function addCart(product) {
     // Creation Local Storage
     let cartLocalStorage = JSON.parse(localStorage.getItem("product"));
     console.log(cartLocalStorage);
-
+    // Si le localstorage existe deja
     if (cartLocalStorage != null) {
       let content = cartLocalStorage.find(
         (p) => p.productId == productId && p.color == color
       );
       console.log(content);
-
+      // Si le ls contient deja le produit de meme coloeur
       if (content !== undefined) {
         content.quantity = content.quantity + quantity;
         localStorage.setItem("product", JSON.stringify(cartLocalStorage));
+        // Si le ls ne contient pas le produit
       } else {
         cartLocalStorage.push(selection);
         localStorage.setItem("product", JSON.stringify(cartLocalStorage));
       }
+      // Si le localstorage n'existe pas on le cree
     } else {
       cartLocalStorage = [];
       cartLocalStorage.push(selection);

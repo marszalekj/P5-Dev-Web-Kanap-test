@@ -137,7 +137,7 @@ function changeQuantity() {
   }
 }
 changeQuantity();
-// Calcul de la quantite totale et du prix total
+// Calcul de la quantite totale
 function total() {
   let quantity = document.getElementsByClassName("itemQuantity");
   let productLength = quantity.length;
@@ -150,6 +150,7 @@ function total() {
   let productTotalQuantity = document.getElementById("totalQuantity");
   productTotalQuantity.textContent = totalQuantity;
 
+  // Calcul du prix total
   totalPrice = 0;
   for (let i = 0; i < productLength; i++) {
     let price = cartLocalStorage[i].price;
@@ -221,6 +222,7 @@ let inputEmail = email.addEventListener("change", function () {
 // On ecoute le clic sur le bouton commander
 btnOrder.addEventListener("click", function (e) {
   e.preventDefault();
+  // Si tout est ok on peut passer commande
   if (
     checkInput(firstName, textRegExp) &&
     checkInput(lastName, textRegExp) &&
@@ -263,11 +265,12 @@ btnOrder.addEventListener("click", function (e) {
           let orderId = server.orderId;
           console.log(server);
           console.log(orderId);
-          // Si l'orderId a bien été récupéré, on redirige l'utilisateur vers la page de Confirmation
+          // Si orderId récupéré, renvoie vers la page  Confirmation
           window.location.href = `./confirmation.html?orderid=${orderId}`;
           localStorage.clear();
         });
     }
+    // Si champs incorrects on previent le client
   } else if (
     checkInput(firstName, textRegExp) ||
     checkInput(lastName, textRegExp) ||
