@@ -67,7 +67,7 @@ function addCart(product) {
     let cartLocalStorage = JSON.parse(localStorage.getItem("product"));
     console.log(cartLocalStorage);
     // Si le localstorage existe deja
-    if (cartLocalStorage != null) {
+    if (cartLocalStorage != null && color && quantity > 0) {
       let content = cartLocalStorage.find(
         (p) => p.productId == productId && p.color == color
       );
@@ -83,9 +83,11 @@ function addCart(product) {
       }
       // Si le localstorage n'existe pas on le cree
     } else {
-      cartLocalStorage = [];
-      cartLocalStorage.push(selection);
-      localStorage.setItem("product", JSON.stringify(cartLocalStorage));
+      if (color && quantity > 0) {
+        cartLocalStorage = [];
+        cartLocalStorage.push(selection);
+        localStorage.setItem("product", JSON.stringify(cartLocalStorage));
+      }
     }
   });
 }
