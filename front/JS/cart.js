@@ -184,14 +184,14 @@ function checkInput(input, regex) {
   let p = input.nextElementSibling;
   // Si les donnees sont ok
   if (testInput) {
-    p.textContent = "Champ valide";
+    p.textContent = "Champs valide";
     p.style.color = "#006400";
-    p.style.color.remove = "#BDB0C7";
+    p.style.color.remove = "#FF0000";
     return true;
     // Si les donnees ne sont pas ok
   } else {
     p.textContent = "Champ non valide";
-    p.style.color = "#BDB0C7";
+    p.style.color = "#FF0000";
     p.style.color.remove = "#006400";
     return false;
   }
